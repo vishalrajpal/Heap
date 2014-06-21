@@ -1,5 +1,13 @@
 package com.heap;
 
+// Heap Operations
+// DeleteMax/ExtractMax O(logn)
+// Query Max/Min O(1)
+// InsertElement O(logn)
+// Heapify O(logn)
+// Build Heap O(nlogn)
+// Order Statistics
+
 public class Heap {
 
 	Node[] heap_array=new Node[0];
@@ -53,7 +61,7 @@ public class Heap {
 		{
 			buildMinHeap(int_array);
 		}
-		
+		printHeap();
 	}
 	
 	private void buildMaxHeap(int[] int_array)
@@ -61,19 +69,28 @@ public class Heap {
 		int array_len=int_array.length;
 		for(int i=0;i<array_len;i++)
 		{
-			insertElementInMaxHeap(int_array[i]);
+			insertElementInHeap(int_array[i]);
 		}
-		printHeap();
+		
 	}
 	
-	void insertElementInMaxHeap(int elem)
+	private void buildMinHeap(int[] int_array)
+	{
+		int array_len=int_array.length;
+		for(int i=0;i<array_len;i++)
+		{
+			insertElementInHeap(int_array[i]);
+		}
+	}
+	
+	void insertElementInHeap(int elem)
 	{
 		Node n = new Node();
 		n.value=elem;
-		insertNodeInMaxHeap(n);
+		insertNodeInHeap(n);
 	}
 	
-	void insertNodeInMaxHeap(Node n)
+	private void insertNodeInHeap(Node n)
 	{
 		int heap_len=heap_array.length;
 		Node[] temp_heap=new Node[heap_len+1];
@@ -98,27 +115,86 @@ public class Heap {
 			{
 				parentNode.rightChild=childNode;
 			}
-			MaxHeapifyBottomUp(nodeIndex);
+			HeapifyBottomUp(nodeIndex);
 		}
 	}
 	
-	private void MaxHeapifyBottomUp(int index)
+	private void HeapifyBottomUp(int index)
 	{
 		Node nodeToHeapify=heap_array[index];
 		int nodeParentIndex=getParentNodeIndex(index);
 		if(index>0 && nodeParentIndex>=0)
 		{
-			Node lastNodeParent=heap_array[nodeParentIndex];
-			if(lastNodeParent.value<nodeToHeapify.value)
+			Node parentNode=heap_array[nodeParentIndex];
+			if((this.isMaxHeap && parentNode.value<nodeToHeapify.value) || (!this.isMaxHeap && parentNode.value>nodeToHeapify.value))
 			{
-				lastNodeParent.num_elements+=1;
+				parentNode.num_elements+=1;
 				swapNodeValues(nodeParentIndex, index);
-				MaxHeapifyBottomUp(nodeParentIndex);
+				HeapifyBottomUp(nodeParentIndex);
 			}
 			else
 			{
 				increaseNumElements(nodeParentIndex);
 			}
+		}
+	}
+		
+	private void HeapifyTopDown(int index)
+	{
+		int heap_len=heap_array.length;
+		int leftChildIndex=(2*index)+1;
+		int rightChildIndex=(2*index)+2;
+		int maxMinIndex=index;
+		Node leftChild=null;
+		Node rightChild=null;
+		
+		if(leftChildIndex<heap_len)
+			leftChild=heap_array[leftChildIndex];
+		
+		if(rightChildIndex<heap_len)
+			rightChild=heap_array[rightChildIndex];
+		
+		if(leftChild!=null && 
+				((this.isMaxHeap && leftChild.value>heap_array[maxMinIndex].value) || 
+						(!this.isMaxHeap && leftChild.value<heap_array[maxMinIndex].value)))
+			maxMinIndex=leftChildIndex;
+		if(rightChild!=null && 
+				((this.isMaxHeap && rightChild.value>heap_array[maxMinIndex].value) || 
+						(!this.isMaxHeap && rightChild.value<heap_array[maxMinIndex].value)))
+			maxMinIndex=rightChildIndex;
+		
+		if(maxMinIndex!=index)
+		{
+			swapNodeValues(index, maxMinIndex);
+			HeapifyTopDown(maxMinIndex);
+		}
+	}
+	
+	int ExtractMaxOrMin()
+	{
+		int heap_len=heap_array.length;
+		int maxOrMinValue=heap_array[0].value;
+		int lastNodeIndex=heap_len-1;
+		swapNodeValues(0,lastNodeIndex);
+		decreaseNumElements(lastNodeIndex);
+		
+		Node[] temp_array=new Node[heap_len-1];
+		System.arraycopy(heap_array, 0, temp_array, 0, heap_len-1);
+		heap_array=temp_array;
+		HeapifyTopDown(0);
+		printHeap();
+		return maxOrMinValue;
+	}
+	
+	int getMaxOrMin()
+	{
+		try
+		{
+			return heap_array[0].value;
+		}
+		catch(Exception e)
+		{
+			throw e;
 		}
 	}
 	
@@ -134,22 +210,6 @@ public class Heap {
 	private int getParentNodeIndex(float index)
 	{
 		return (int)Math.floor((index-1)/2);
-	}
-	
-	int ExtractMax()
-	{
-		int heap_len=heap_array.length;
-		int maxValue=heap_array[0].value;
-		int lastNodeIndex=heap_len-1;
-		swapNodeValues(0,lastNodeIndex);
-		decreaseNumElements(lastNodeIndex);
-		
-		Node[] temp_array=new Node[heap_len-1];
-		System.arraycopy(heap_array, 0, temp_array, 0, heap_len-1);
-		heap_array=temp_array;
-		MaxHeapifyTopDown(0);
-		printHeap();
-		return maxValue;
 	}
 	
 	private void decreaseNumElements(int index)
@@ -169,55 +229,11 @@ public class Heap {
 		}
 	}
 	
-	private void MaxHeapifyTopDown(int index)
-	{
-		int heap_len=heap_array.length;
-		int leftChildIndex=(2*index)+1;
-		int rightChildIndex=(2*index)+2;
-		int maxIndex=index;
-		Node leftChild=null;
-		Node rightChild=null;
-		
-		if(leftChildIndex<heap_len)
-			leftChild=heap_array[leftChildIndex];
-		
-		if(rightChildIndex<heap_len)
-			rightChild=heap_array[rightChildIndex];
-		
-		if(leftChild!=null && leftChild.value>heap_array[maxIndex].value)
-			maxIndex=leftChildIndex;
-		if(rightChild!=null && rightChild.value>heap_array[maxIndex].value)
-			maxIndex=rightChildIndex;
-		
-		if(maxIndex!=index)
-		{
-			swapNodeValues(index, maxIndex);
-			MaxHeapifyTopDown(maxIndex);
-		}
-	}
-	
-
-	private void buildMinHeap(int[] int_array)
-	{
-		int array_len=int_array.length;
-		for(int i=0;i<array_len;i++)
-		{
-			Node n = new Node();
-			n.value=int_array[i];
-			insertInMinHeap(n);
-		}
-	}
-	
-	void swapNodeValues(int i, int j)
+	private void swapNodeValues(int i, int j)
 	{
 		int temp_node_val=heap_array[i].value;
 		heap_array[i].value=heap_array[j].value;
 		heap_array[j].value=temp_node_val;
-	}
-		
-	void insertInMinHeap(Node n)
-	{
-		
 	}
 	
 	void printHeap()

@@ -10,7 +10,7 @@ public class TestHeap {
 //		    a[i] = (int)(Math.random() * 100000);
 //		}
 		int[] test_array={1,2,3,4,5};
-		int[] test_array1={5,4,3,2,1,10,8,9,7,6};
+		//int[] test_array1={5,4,3,2,1,10,8,9,7,6};
 		Heap h = new Heap(test_array);
 		
 		//long stopTime = System.currentTimeMillis();
@@ -18,7 +18,8 @@ public class TestHeap {
 	    System.out.println("");
 	    System.out.println("");
 	    //System.out.println(elapsedTime);
-	    //System.out.println(h.ExtractMax());
+	    //System.out.println(h.ExtractMaxOrMin());
+	    System.out.println(h.getMaxOrMin());
 	    
 	}
 }
