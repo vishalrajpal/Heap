@@ -9,7 +9,7 @@ public class TestHeap {
 	    
 		Heap<Integer> integerHeap=new Heap<Integer>(test_array, intComp);
 		
-	    System.out.println("Extract Max Operation:"+integerHeap.ExtractMaxOrMin());	// Expected 5
+		System.out.println("Extract Max Operation:"+integerHeap.ExtractMaxOrMin());	// Expected 5
 	    integerHeap.printHeap();	// Expected 5 deleted from the Heap
 		System.out.println("Maximum Element:"+integerHeap.getMaxOrMin());	//Expected 4
 		integerHeap.insertElementInHeap(50);
