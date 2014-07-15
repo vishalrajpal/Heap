@@ -2,7 +2,7 @@ package com.heap;
 
 import java.util.Comparator;
 
-public class IntComparator implements Comparator<Node<Integer>>{
+public class IntegerComparator implements Comparator<Node<Integer>>{
 
 	@Override
 	public int compare(Node<Integer> nodeOne, Node<Integer> nodeTwo) {

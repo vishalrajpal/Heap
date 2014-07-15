@@ -4,7 +4,7 @@ public class TestHeap {
 
 	public static void main(String[] args)
 	{
-		IntComparator intComp=new IntComparator();
+		IntegerComparator intComp=new IntegerComparator();
 		Integer[] test_array={1,2,3,4,5};
 	    
 		Heap<Integer> integerHeap=new Heap<Integer>(test_array, intComp);
