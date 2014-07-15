@@ -2,63 +2,74 @@ package com.heap;
 
 import java.util.Comparator;
 
-/* Heap Operations
- 	
- 	1) DeleteMax/ExtractMax: ------ Running Time: O(logn)
- 	2) Query Max/Min: ------- Running Time: O(1)
- 	3) InsertElement: ----- Running Time: O(logn)
- 	4) Heapify: ----- Running Time: O(logn)
- 	5) Build Heap: ------ Running Time: O(nlogn)
- 	6) Find K Min/Max Elements: ------ Running Time: O(klogn)
-*/
+/** 
+ * Heap Operations
+ * 1) DeleteMax/ExtractMax: ------ Running Time: O(logn)
+ * 2) Query Max/Min: ------- Running Time: O(1)
+ * 3) InsertElement: ----- Running Time: O(logn)
+ * 4) Heapify: ----- Running Time: O(logn)
+ * 5) Build Heap: ------ Running Time: O(nlogn)
+ * 6) Find K Min/Max Elements: ------ Running Time: O(klogn)
+ * 
+ * @param <AnyType>: The type of values Heap will store and based on which other methods will operate
+ *  
+ */
+
 public class Heap<AnyType>{
 
-	/*-----------------------------------------------------------------------------------------------------------------*/
-	// Data Definition:
-	// 
-	// Node: A Node is an object of generic Node Class. A Heap consists of number of objects of class Node
-	//
-	// Interpretation:
-	//
-	// 	value: The value of a Node and can be of any Object Type
-	//
-	// Data Definition End
-	/*-----------------------------------------------------------------------------------------------------------------*/
-
+	/** Data Definition:
+	 * 
+	 * Node: A Node is an object of generic Node Class. A Heap consists of number of objects of 
+	 * class Node
+	 * 
+	 * Interpretation:
+	 * 		value: The value of a Node and can be of any Object Type
+	 * 
+	 * Data Definition End
+	 */
+	
 	Node<AnyType>[] heap_array;
 	Comparator<Node<AnyType>> comparator=null;
 	boolean isMaxHeap=true;
 	int lastElementIndex=0;	
 	
-	
-	// Constructor 1
-	// Contract: AnyType[], Comparator<Node<AnyType>> -> void
-	// Given: An array of any Object Type and a Comparator of Node type based on which values will be compared
-	// Effect: Builds a Max Heap from the given AnyType array 'arr'
-	
+	/** Constructor 1
+	 * 
+	 * Contract: AnyType[], Comparator<Node<AnyType>> -> void
+	 * @param arr: An array of AnyType, values of which will be used to reate of Node<AnyType>
+	 * @param c: A Comparator of Node Type based on which values will be compared
+	 * 
+	 * Effect: Builds a Max Heap from the given AnyType array 'arr'
+	 */
 	Heap(AnyType[] arr, Comparator<Node<AnyType>> c)
 	{
 		comparator=c;
 		buildHeap(arr);
 	}
 
-	// Constructor 2
-	// Contract: Boolean, Comparator<Node<AnyType>> -> void
-	// Given: A boolean representing if the Heap should be a MaxHeap or MinHeap and a Comparator based on which values will be compared
-	// Effect: Creates a Min Heap or Max Heap depending upon the boolean value given, if true creates a MaxHeap else a MinHeap
-	
+	/** Constructor 2
+	 * Contract: Boolean, Comparator<Node<AnyType>> -> void
+	 * @param isMaxHeap: Represents if the Heap should be a MaxHeap or MinHeap
+	 * @param c: A Comparator of Node Type based on which values will be compared
+	 * 
+	 * Effect: Creates a Min Heap or Max Heap depending upon the boolean value given, if true
+	 * creates a MaxHeap else a MinHeap
+	 */
 	Heap(boolean isMaxHeap, Comparator<Node<AnyType>> c)
 	{
 		comparator=c;
 		this.isMaxHeap=isMaxHeap;
 	}
 	
-	// Constructor 3
-	// Contract: AnyType[], Boolean, Comparator<Node<AnyType>>: void
-	// Given: An array of AnyType and a boolean value if a Max-Heap needs to be created or a Min-Heap 
-	// and a Comparator based on which values will be compared.
-	// Effect: Builds a Max-Heap or Min-Heap based on the the boolena value with the given array 'arr'
-	
+	/** Constructor 3
+	 * Contract: AnyType[], Boolean, Comparator<Node<AnyType>>: void
+	 * @param arr: An array of AnyType, values of which will be used to reate of Node<AnyType>
+	 * @param isMaxHeap: Represents if the Heap should be a MaxHeap or MinHeap
+	 * @param c: A Comparator of Node Type based on which values will be compared
+	 * 
+	 * Effect: Builds a Max-Heap or Min-Heap based on the the boolean value with the given array
+	 * 'arr'
+	 */
 	Heap(AnyType[] arr, boolean isMaxHeap, Comparator<Node<AnyType>> c)
 	{
 		comparator=c;
@@ -66,10 +77,12 @@ public class Heap<AnyType>{
 		buildHeap(arr);
 	}
 	
-	// buildHeap: AnyType[] -> void
-	// Given: An array containing one of the Object types
-	// Effect: Creates a Heap with the given array
-	
+	/**
+	 * buildHeap: AnyType[] -> void
+	 * @param arr: An array of AnyType, values of which will be used to reate of Node<AnyType>
+	 * 
+	 * Effect: Creates a Heap with the given array
+	 */
 	private void buildHeap(AnyType[] arr)
 	{
 		int array_len=arr.length;
@@ -81,10 +94,13 @@ public class Heap<AnyType>{
 		printHeap();
 	}
 	
-	// insertElementInHeap: Integer -> void
-	// Given: An Integer
-	// Effect: Inserts the given integer in the Heap by creating an equivalent object of Node for it
-	
+	/**
+	 * insertElementInHeap: Integer -> void
+	 * @param elem: A value of AnyType
+	 * 
+	 * Effect: Inserts the given integer in the Heap by creating an equivalent object of Node for
+	 * it
+	 */
 	void insertElementInHeap(AnyType elem)
 	{
 		Node<AnyType> n = new Node<AnyType>();
@@ -93,10 +109,12 @@ public class Heap<AnyType>{
 		lastElementIndex+=1;
 	}
 	
-	// insertNodeInHeap: Node -> void
-	// Given: An object of Node class
-	// Effect: Inserts the given Node in the Max-Heap or Min-Heap
-	
+	/**
+	 * insertNodeInHeap: Node -> void
+	 * @param n: An Object of Node<AnyType> class
+	 * 
+	 * Effect: Inserts the given Node in the Max-Heap or Min-Heap
+	 */
 	private void insertNodeInHeap(Node<AnyType> n)
 	{
 		int heap_len=heap_array.length;
@@ -111,10 +129,12 @@ public class Heap<AnyType>{
 			heapify(lastElementIndex);
 	}
 	
-	// heapify: int -> void
-	// Given: An index of an element in Heap
-	// Effect: Heapifies a Node at element 'index' bottom-up or top-down
-	
+	/**
+	 * heapify: int -> void
+	 * @param index: An index of an element in Heap
+	 * 
+	 * Effect: Heapifies a Node at element 'index' bottom-up or top-down
+	 */
 	private void heapify(int index)
 	{
 		int heap_len=lastElementIndex;
@@ -170,10 +190,11 @@ public class Heap<AnyType>{
 		}
 	}
 	
-	// ExtractMaxOrMin: -> Integer
-	// Returns: Returns & Deletes the Maximum element if it is a Max-Heap, Minimum element if it is a Min-Heap,
-	// and then Heapifies the heap.
-	
+	/**
+	 * ExtractMaxOrMin: -> Integer
+	 * @return: Returns & Deletes the Maximum element if it is a Max-Heap, Minimum element if it is
+	 * a Min-Heap and then Heapifies the heap.
+	 */
 	AnyType ExtractMaxOrMin()
 	{
 		AnyType maxOrMinValue=getMaxOrMin();
@@ -185,9 +206,10 @@ public class Heap<AnyType>{
 		return maxOrMinValue;
 	}
 	
-	// getMaxOrMin: -> Integer
-	// Returns: The Maximum element if it is a Max-Heap, Minimum element if it is a Min-Heap.
-	
+	/**
+	 * getMaxOrMin: -> Integer
+	 * @return: The Maximum element if it is a Max-Heap, Minimum element if it is a Min-Heap.
+	 */
 	AnyType getMaxOrMin()
 	{
 		try
@@ -200,10 +222,13 @@ public class Heap<AnyType>{
 		}
 	}
 	
-	// findKMaxOrMinElements: Integer -> Integer[]
-	// Given: An Integer representing the number of Maximum or Minimum elements needed from the Max-Heap Or Min-Heap respectively
-	// Returns: An array of Maximum Or Minimum 'k' elements from the Max-Heap Or Min-Heap respectively.
-	
+	/**
+	 * findKMaxOrMinElements: Integer -> Integer[]
+	 * @param k: An Integer representing the number of Maximum or Minimum elements needed from the
+	 * Max-Heap Or Min-Heap respectively
+	 * 
+	 * @return: An array of Maximum Or Minimum 'k' elements from the Max-Heap Or Min-Heap respectively.
+	 */
 	AnyType[] findKMaxOrMinElements(int k)
 	{
 		if(k>lastElementIndex)
@@ -218,37 +243,44 @@ public class Heap<AnyType>{
 		return resultArray;
 	}
 	
-	// getParentNodeIndex: Float -> Integer
-	// Given: An index of the 'heap_array' as a float value since need an exact floor value
-	// Returns: The index of the parent of the given index
-	
+	/**
+	 * getParentNodeIndex: Float -> Integer
+	 * @param index: An index of the 'heap_array' as a float value since need an exact floor value
+	 * 
+	 * @return: The index of the parent of the given index
+	 */
 	private int getParentNodeIndex(float index)
 	{
 		return (int)Math.floor((index-1)/2);
 	}
 	
-	// getLeftChildIndex: int -> int
-	// Given: An index of the 'heap_array'
-	// Returns: The index of the left child of the Node at the given index
-	
+	/**
+	 * getLeftChildIndex: int -> int
+	 * @param index: An index of the 'heap_array'
+	 * @return: The index of the left child of the Node at the given index
+	 */
 	private int getLeftChildIndex(int index)
 	{
 		return (2*index)+1;
 	}
 	
-	// getLeftChildIndex: int -> int
-	// Given: An index of the 'heap_array'
-	// Returns: The index of the right child of the Node at the given index
-	
+	/**
+	 * getRightChildIndex: int -> int
+	 * @param index: An index of the 'heap_array'
+	 * @return: The index of the right child of the Node at the given index
+	 */
 	private int getRightChildIndex(int index)
 	{
 		return (2*index)+2;
 	}
 	
-	// swapNodeValues: Integer, Integer -> void
-	// Given: Two integers representing the indexes of the heap_array
-	// Effect: Swap the values of the two Nodes at the given Indexes.
-	
+	/**
+	 * swapNodeValues: Integer, Integer -> void
+	 * @param i: An index of the 'heap_array'
+	 * @param j: An index of the 'heap_array'
+	 * 
+	 * Effect: Swap the values of the two Nodes at the given Indexes.
+	 */
 	private void swapNodeValues(int i, int j)
 	{
 		AnyType temp_node_val=(AnyType) heap_array[i].value;
@@ -256,12 +288,13 @@ public class Heap<AnyType>{
 		heap_array[j].value=temp_node_val;
 	}
 	
-	// printHeap: -> void
-	// Effect: Prints the Heap for 'this', If a Node has no child represents its child as -1
-	
+	/**
+	 * printHeap: -> void
+	 * 
+	 * Effect: Prints the Heap for 'this', If a Node has no child represents its child as -1
+	 */
 	void printHeap()
 	{
-		//int heap_length=heap_array.length;
 		for(int i=0;i<lastElementIndex;i++)
 		{
 			Node<AnyType> printNode=heap_array[i];
@@ -277,6 +310,14 @@ public class Heap<AnyType>{
 		}
 	}
 	
+	/**
+	 * printArray: Object[] -> void
+	 * @param arr: An array of Object type
+	 * 
+	 * Effect: Prints the given array
+	 * 
+	 * Note: Used for testing purpose...
+	 */
 	void printArray(Object[] arr)
 	{
 		for(int arCount=0;arCount<arr.length;arCount++)
