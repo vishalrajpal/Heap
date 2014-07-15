@@ -18,14 +18,14 @@ public class TestHeap {
 		integerHeap.printArray(integerHeap.findKMaxOrMinElements(3));	//Expected 50, 4, 3
 		
 		
-	    StringComparator strComp=new StringComparator();
-	    String[] test_string={"e", "d", "c", "b", "a"};
-	    
-	    Heap<String> stringHeap=new Heap<String>(test_string, false, strComp);	    
-	    
-	    System.out.println("Extract Min Operation:"+stringHeap.ExtractMaxOrMin());	// Expected "a"
-	    stringHeap.printHeap();	// Expected "a" deleted from the Heap
-		
+		StringComparator strComp=new StringComparator();
+		String[] test_string={"e", "d", "c", "b", "a"};
+
+		Heap<String> stringHeap=new Heap<String>(test_string, false, strComp);	    
+
+		System.out.println("Extract Min Operation:"+stringHeap.ExtractMaxOrMin());	// Expected "a"
+		stringHeap.printHeap();	// Expected "a" deleted from the Heap
+
 		System.out.println("Minimum Element:"+stringHeap.getMaxOrMin());	//Expected "b"
 		stringHeap.insertElementInHeap("Algorithms");
 		System.out.println("Minimum Element:"+stringHeap.getMaxOrMin());	//Expected "Algorithms"
