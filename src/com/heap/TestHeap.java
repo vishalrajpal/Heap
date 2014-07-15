@@ -5,28 +5,29 @@ public class TestHeap {
 	public static void main(String[] args)
 	{
 		IntComparator intComp=new IntComparator();
-		int[] test_array={1,2,3,4,5};
-		Heap h = new Heap(test_array, intComp);
+		Integer[] test_array={1,2,3,4,5};
 	    
+		Heap<Integer> integerHeap=new Heap<Integer>(test_array, intComp);
 		
-//		1) DeleteMax/ExtractMax: ------ Running Time: O(logn)
-//	 	2) Query Max/Min: ------- Running Time: O(1)
-//	 	3) InsertElement: ----- Running Time: O(logn)
-//	 	4) Heapify: ----- Running Time: O(logn)
-//	 	5) Build Heap: ------ Running Time: O(nlogn)
-//	 	6) Find K Min/Max Elements: ------ Running Time: O(klogn)
+	    System.out.println("Extract Max Operation:"+integerHeap.ExtractMaxOrMin());	// Expected 5
+	    integerHeap.printHeap();	// Expected 5 deleted from the Heap
+		System.out.println("Maximum Element:"+integerHeap.getMaxOrMin());	//Expected 4
+		integerHeap.insertElementInHeap(50);
+		System.out.println("Maximum Element:"+integerHeap.getMaxOrMin());	//Expected 50
+		integerHeap.printArray(integerHeap.findKMaxOrMinElements(8));	//Expected 50, 4, 3
 		
-		System.out.println("Extract Max Operation:"+h.ExtractMaxOrMin());	// Expected 5
-		h.printHeap();	// Expected 5 deleted from the Heap
 		
-		System.out.println("Maximum Element:"+h.getMaxOrMin());	//Expected 4
+	    StringComparator strComp=new StringComparator();
+	    String[] test_string={"Banana", "Orange", "Apple", "Mango"};
+	    
+	    Heap<String> stringHeap=new Heap<String>(test_string, false, strComp);	    
+	    
+	    System.out.println("Extract Min Operation:"+stringHeap.ExtractMaxOrMin());	// Expected "Apple"
+	    stringHeap.printHeap();	// Expected "Apple" deleted from the Heap
 		
-		h.insertElementInHeap(50);
-		
-		System.out.println("Maximum Element:"+h.getMaxOrMin());	//Expected 50
-		
-		h.printArray(h.findKMaxOrMinElements(8));	//Expected 50, 4, 3
+		System.out.println("Minimum Element:"+stringHeap.getMaxOrMin());	//Expected "Banana"
+		stringHeap.insertElementInHeap("Algorithms");
+		System.out.println("Maximum Element:"+stringHeap.getMaxOrMin());	//Expected "Algorithms"
+		stringHeap.printArray(stringHeap.findKMaxOrMinElements(3));	//Expected "Algorithms", "Banana", "Mango"
 	}
-	
-	
 }
