@@ -1,5 +1,7 @@
 package com.heap;
 
+import java.util.Comparator;
+
 /* Heap Operations
  	
  	1) DeleteMax/ExtractMax: ------ Running Time: O(logn)
@@ -27,78 +29,43 @@ public class Heap{
 	// Data Definition End
 	/*-----------------------------------------------------------------------------------------------------------------*/
 
-	Node[] heap_array=new Node[0];
+	Node[] heap_array;
 	boolean isMaxHeap=true;
-		
+	int lastElementIndex=0;	
+	Comparator<Node> comparator=null;
+	
 	// Constructor 1
-	// Contract: int[] -> void
-	// Given: An integer array
+	// Contract: int[], Comparator -> void
+	// Given: An integer array and a Comparator based on which values will be compared
 	// Effect: Builds a Max Heap from the given integer array 'int_array'
 	
-	Heap(int[] int_array)
+	Heap(int[] int_array, Comparator c)
 	{
+		comparator=c;
 		buildHeap(int_array);
+		
 	}
 	
 	// Constructor 2
-	// Contract: Node -> void
-	// Given: An object of class Node
-	// Effect: Builds a Max Heap with the given Node as the root of the Heap.
+	// Contract: Boolean, Comparator -> void
+	// Given: A boolean representing if the Heap should be a MaxHeap or MinHeap and a Comparator based on which values will be compared
+	// Effect: Creates a Min Heap or Max Heap depending upon the boolean value given, if true creates a MaxHeap else a MinHeap
 	
-	Heap(Node n)
+	Heap(boolean isMaxHeap, Comparator c)
 	{
-		this.heap_array[0]=n;
+		comparator=c;
+		this.isMaxHeap=isMaxHeap;
 	}
 	
 	// Constructor 3
-	// Contract: Node[] -> void
-	// Given: An array of objects of class Node
-	// Effect: Treats the given array of objects of Node as a Max Heap
-	
-	Heap(Node[] n_array)
-	{
-		this.heap_array=n_array;
-	}
-	
-	// Constructor 4
-	// Contract: Boolean -> void
-	// Given: A boolean representing if the Heap should be a MaxHeap or MinHeap
-	// Effect: Creates a Min Heap or Max Heap depending upon the boolean value given, if true creates a MaxHeap else a MinHeap
-	
-	Heap(boolean isMaxHeap)
-	{
-		this.isMaxHeap=isMaxHeap;
-	}
-	
-	// Constructor 5
-	// Contract: Node, Boolean -> void
-	// Given: An object of class Node and a boolean value
-	// Effect: Creates a Max Heap or Min Heap based on the given boolean value with the given Node as the root element
-	
-	Heap(Node n, boolean isMaxHeap)
-	{
-		this.isMaxHeap=isMaxHeap;
-		this.heap_array[0]=n;
-	}
-	
-	// Constructor 5
-	// Contract: Node[], Boolean: void
-	// Given: An array of objects of class Node, and a Boolean value representing if a Max-Heap needs to be created or a Min-Heap.
-	// Effect: Creates a Max-Heap or Min-Heap with the given array of objects of Node class
-	
-	Heap(Node[] n_array, boolean isMaxHeap)
-	{
-		this.isMaxHeap=isMaxHeap;
-		this.heap_array=n_array;
-	}
-	
-	// Constructor 6
-	// Contract: int[], Boolean: void
-	// Given: An array of integers and a boolean value if a Max-Heap needs to be created or a Min-Heap.
+	// Contract: int[], Boolean, Comparator: void
+	// Given: An array of integers and a boolean value if a Max-Heap needs to be created or a Min-Heap 
+	// and a Comparator based on which values will be compared.
 	// Effect: Builds a ax-Heap or Min-Heap based on the the boolena value with the given array of integers
 	
-	Heap(int[] int_array, boolean isMaxHeap)
+	Heap(int[] int_array, boolean isMaxHeap, Comparator c)
 	{
+		comparator=c;
 		this.isMaxHeap=isMaxHeap;
 		buildHeap(int_array);
 	}
@@ -110,6 +77,7 @@ public class Heap{
 	private void buildHeap(int[] int_array)
 	{
 		int array_len=int_array.length;
+		heap_array=new Node[array_len];
 		for(int i=0;i<array_len;i++)
 		{
 			insertElementInHeap(int_array[i]);
@@ -126,6 +94,7 @@ public class Heap{
 		Node n = new Node();
 		n.value=elem;
 		insertNodeInHeap(n);
+		lastElementIndex+=1;
 	}
 	
 	// insertNodeInHeap: Node -> void
@@ -135,108 +104,96 @@ public class Heap{
 	private void insertNodeInHeap(Node n)
 	{
 		int heap_len=heap_array.length;
-		Node[] temp_heap=new Node[heap_len+1];
-		System.arraycopy(heap_array, 0, temp_heap, 0, heap_len);
-		temp_heap[temp_heap.length-1]=n;
-		heap_array=temp_heap;
-		
-		heap_len=heap_array.length;
-		if(heap_len>1)
+		if(heap_len==lastElementIndex)
 		{
-			int nodeIndex=heap_len-1;
-			int nodeParentIndex=getParentNodeIndex(nodeIndex);
-			Node parentNode=heap_array[nodeParentIndex];
-			Node childNode=heap_array[nodeIndex];
-			childNode.parent=parentNode;
-			
-			if(parentNode.leftChild==null)
-			{
-				parentNode.leftChild=childNode;
-			}
-			else
-			{
-				parentNode.rightChild=childNode;
-			}
-			HeapifyBottomUp(nodeIndex);
+			Node[] temp_heap=new Node[heap_len*2];
+			System.arraycopy(heap_array, 0, temp_heap, 0, heap_len);
+			heap_array=temp_heap;
+		}
+		heap_array[lastElementIndex]=n;
+		
+		if(lastElementIndex>0)
+		{
+			heapify(lastElementIndex);
 		}
 	}
 	
-	// HeapifyBottomUp: Integer -> void
-	// Given: An Integer representing the index of the 'heap_array'
-	// Effect: Max-Heapifies or Min-Heapifies the Heap from the given index upward towards the root of the Heap
-	
-	private void HeapifyBottomUp(int index)
-	{
-		Node nodeToHeapify=heap_array[index];
-		int nodeParentIndex=getParentNodeIndex(index);
-		if(index>0 && nodeParentIndex>=0)
-		{
-			Node parentNode=heap_array[nodeParentIndex];
-			if((this.isMaxHeap && parentNode.value<nodeToHeapify.value) || (!this.isMaxHeap && parentNode.value>nodeToHeapify.value))
-			{
-				parentNode.num_elements+=1;
-				swapNodeValues(nodeParentIndex, index);
-				HeapifyBottomUp(nodeParentIndex);
-			}
-			else
-			{
-				increaseNumElements(nodeParentIndex);
-			}
-		}
-	}
-		
-	// HeapofyTopDown: Integer -> void
-	// Given: An Integer representing the index of the 'heap_array'
-	// Effect: Max-Heapifies or Min-Heapifies the Heap from the given index downward towards the leaf nodes
-	
-	private void HeapifyTopDown(int index)
+	private void heapify(int index)
 	{
 		int heap_len=heap_array.length;
+		Node nodeToHeapify=heap_array[index];
+		int nodeParentIndex=getParentNodeIndex(index);
 		int leftChildIndex=(2*index)+1;
 		int rightChildIndex=(2*index)+2;
+		Node leftChild,rightChild,parent;
+		leftChild=rightChild=parent=null;
+		int indexToSwap=-1;
 		int maxMinIndex=index;
-		Node leftChild=null;
-		Node rightChild=null;
-		
 		if(leftChildIndex<heap_len)
 			leftChild=heap_array[leftChildIndex];
 		
 		if(rightChildIndex<heap_len)
 			rightChild=heap_array[rightChildIndex];
 		
-		if(leftChild!=null && 
-				((this.isMaxHeap && leftChild.value>heap_array[maxMinIndex].value) || 
-						(!this.isMaxHeap && leftChild.value<heap_array[maxMinIndex].value)))
-			maxMinIndex=leftChildIndex;
-		if(rightChild!=null && 
-				((this.isMaxHeap && rightChild.value>heap_array[maxMinIndex].value) || 
-						(!this.isMaxHeap && rightChild.value<heap_array[maxMinIndex].value)))
-			maxMinIndex=rightChildIndex;
+		if(nodeParentIndex>=0)
+			parent=heap_array[nodeParentIndex];
 		
-		if(maxMinIndex!=index)
+		if(this.isMaxHeap)
 		{
-			swapNodeValues(index, maxMinIndex);
-			HeapifyTopDown(maxMinIndex);
+			if(parent!=null && comparator.compare(parent, nodeToHeapify)<0)
+				indexToSwap=nodeParentIndex;
+			else 
+			{
+				if(leftChild!=null && comparator.compare(leftChild, heap_array[maxMinIndex])>0)
+				{
+					indexToSwap=leftChildIndex;
+					maxMinIndex=leftChildIndex;
+				}			
+				if(rightChild!=null && comparator.compare(rightChild, heap_array[maxMinIndex])>0)
+				{
+					indexToSwap=leftChildIndex;
+					maxMinIndex=leftChildIndex;
+				}
+			}
+		}
+		else
+		{
+			if(parent!=null && comparator.compare(parent, nodeToHeapify)>0)
+				indexToSwap=nodeParentIndex;
+			else
+			{
+				if(leftChild!=null && comparator.compare(leftChild, heap_array[maxMinIndex])<0)
+				{
+					indexToSwap=leftChildIndex;
+					maxMinIndex=leftChildIndex;
+				}
+				if(rightChild!=null && comparator.compare(rightChild, heap_array[maxMinIndex])<0)
+				{
+					indexToSwap=leftChildIndex;
+					maxMinIndex=leftChildIndex;
+				}
+			}
+			
+		}
+		
+		if(indexToSwap!=-1)
+		{
+			swapNodeValues(indexToSwap, index);
+			heapify(indexToSwap);
 		}
 	}
-	
 	// ExtractMaxOrMin: -> Integer
 	// Returns: Returns & Deletes the Maximum element if it is a Max-Heap, Minimum element if it is a Min-Heap,
 	// and then Heapifies the heap.
 	
 	int ExtractMaxOrMin()
 	{
-		int heap_len=heap_array.length;
 		int maxOrMinValue=getMaxOrMin();
-		int lastNodeIndex=heap_len-1;
+		int lastNodeIndex=lastElementIndex-1;
 		swapNodeValues(0,lastNodeIndex);
-		decreaseNumElements(lastNodeIndex);
-		
-		Node[] temp_array=new Node[heap_len-1];
-		System.arraycopy(heap_array, 0, temp_array, 0, heap_len-1);
-		heap_array=temp_array;
-		HeapifyTopDown(0);
-		printHeap();
+		heap_array[lastNodeIndex]=null;
+		lastElementIndex-=1;
+		heapify(0);
 		return maxOrMinValue;
 	}
 	
@@ -261,8 +218,8 @@ public class Heap{
 	
 	int[] findKMaxOrMinElements(int k)
 	{
-		if(k>heap_array.length)
-			k=heap_array.length;
+		if(k>lastElementIndex)
+			k=lastElementIndex;
 		Node[] tempArray=heap_array;
 		int[] resultArray=new int[k];
 		for(int resCount=0;resCount<k;resCount++)
@@ -271,43 +228,6 @@ public class Heap{
 		}
 		heap_array=tempArray;
 		return resultArray;
-	}
-	
-	// increaseNumElements: Integer -> void
-	// Given: An Integer representing the index of the parent Node of a Node
-	// Effect: Increases the number of element/s 'num_elements' by 1 from the given Index upward towards the root
-
-	private void increaseNumElements(int parentNodeIndex)
-	{
-		while(parentNodeIndex>=0)
-		{
-			heap_array[parentNodeIndex].num_elements+=1;
-			parentNodeIndex=getParentNodeIndex(parentNodeIndex);
-		}
-	}
-	
-	// decreaseNumElements: Integer -> void
-	// Given: An Integer representing the index of the 'heap_array'
-	// Effect: Decreases the number of element/s 'num_elements' by 1 from the given Index upward towards the root
-	
-	private void decreaseNumElements(int index)
-	{
-		int parentNodeIndex=getParentNodeIndex(index);
-		if(index>0)
-		{
-			if(heap_array[index].parent.leftChild==heap_array[index])
-			{
-				heap_array[index].parent.leftChild=null;
-			}else
-			{
-				heap_array[index].parent.rightChild=null;
-			}
-		}
-		while(parentNodeIndex>=0)
-		{
-			heap_array[parentNodeIndex].num_elements-=1;
-			parentNodeIndex=getParentNodeIndex(parentNodeIndex);
-		}
 	}
 	
 	// getParentNodeIndex: Float -> Integer
@@ -335,16 +255,19 @@ public class Heap{
 	
 	void printHeap()
 	{
-		for(int i=0;i<heap_array.length;i++)
+		//int heap_length=heap_array.length;
+		for(int i=0;i<lastElementIndex;i++)
 		{
 			Node printNode=heap_array[i];
+			int leftChildIndex=2*i+1;
+			int rightChildIndex=2*i+2;
 			int leftChildVal=-1;
 			int rightChildVal=-1;
-			if(printNode.leftChild!=null)
-				leftChildVal=printNode.leftChild.value;
-			if(printNode.rightChild!=null)
-				rightChildVal=printNode.rightChild.value;
-			System.out.println("Element:"+printNode.value+", Left Child:"+leftChildVal+" ,Right Child:"+rightChildVal+" ,Num Elements:"+printNode.num_elements);
+			if(leftChildIndex<lastElementIndex && heap_array[leftChildIndex]!=null)
+				leftChildVal=heap_array[leftChildIndex].value;
+			if(rightChildIndex<lastElementIndex && heap_array[rightChildIndex]!=null)
+				rightChildVal=heap_array[rightChildIndex].value;;
+			System.out.println("Element:"+printNode.value+", Left Child:"+leftChildVal+" ,Right Child:"+rightChildVal);
 		}
 	}
 	
