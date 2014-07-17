@@ -57,6 +57,7 @@ public class Heap<AnyType>{
 	 */
 	Heap(boolean isMaxHeap, Comparator<Node<AnyType>> c)
 	{
+		heap_array=new Node[1];
 		comparator=c;
 		this.isMaxHeap=isMaxHeap;
 	}
