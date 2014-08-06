@@ -1,14 +1,17 @@
-Heap
+Heap(Priority Queue)
 ====
 
  Heap Operations
  
- 1) DeleteMax/ExtractRoot: ------ Running Time: <b>O(logn)</b><br/>
- 2) Query Top: ------- Running Time: <b>O(1)</b><br/>
- 3) InsertElement: ----- Running Time: <b>O(logn)</b><br/>
- 4) Heapify: ----- Running Time: <b>O(logn)</b><br/>
- 5) Build Heap: ------ Running Time: <b>O(nlogn)</b><br/>
- 6) Find K Ordered Top Elements: ------ Running Time: <b>O(klogn)</b><br/>
+
+Operations | Running Time
+:---------:|:-----------:
+ DeleteMax/ExtractRoot:| <b>O(logn)</b>
+ Query Top(Max/Min):| <b>O(1)</b>
+ InsertElement:|<b>O(logn)</b>
+ Heapify:|<b>O(logn)</b>
+ Build Heap:|<b>O(nlogn)</b>
+ Find K Ordered Top(Min/Max) Elements:|<b>O(klogn)</b>
  
 File Descriptions:
 
