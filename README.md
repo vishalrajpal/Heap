@@ -3,13 +3,33 @@ Heap
 
  Heap Operations
  
- 1) DeleteMax/ExtractRoot: ------ Running Time: O(logn)<br/>
- 2) Query Top: ------- Running Time: O(1)<br/>
- 3) InsertElement: ----- Running Time: O(logn)<br/>
- 4) Heapify: ----- Running Time: O(logn)<br/>
- 5) Build Heap: ------ Running Time: O(nlogn)<br/>
- 6) Find K Ordered Top Elements: ------ Running Time: O(klogn)<br/>
+ 1) DeleteMax/ExtractRoot: ------ Running Time: <b>O(logn)</b><br/>
+ 2) Query Top: ------- Running Time: <b>O(1)</b><br/>
+ 3) InsertElement: ----- Running Time: <b>O(logn)</b><br/>
+ 4) Heapify: ----- Running Time: <b>O(logn)</b><br/>
+ 5) Build Heap: ------ Running Time: <b>O(nlogn)</b><br/>
+ 6) Find K Ordered Top Elements: ------ Running Time: <b>O(klogn)</b><br/>
  
 File Descriptions:
 
+<b>1) Heap / src / com / heap / Heap.java:</b><br/>
+The library importing which you will be able to use all the Heap operations with the above mentioned Running Times
+
+<b>2) Heap / src / com / heap / MaxIntegerComparator.java:</b><br/>
+This Comparator can be used if a MaxHeap is needed.
+
+<b>3) Heap / src / com / heap / MinHeapComparator.java:</b><br/>
+This Comparator can be used if a MinHeap is needed. The TestHeap.java uses this Comparator to create a MinHeap and performs several Unit Tests.
+
+<b>4) Heap / src / com / heap / Node.java:</b><br/>
+The Heap basically contains the Objects of this class. Currently it has only value field, you can have several other instance variables as satellite data of your Node. The Heap will be managed based on the this.value variable.
+
+<b>5) Heap / src / com / heap / StringComparator.java</b><br/>
+This Comparator can be used to arrange the Strings lexicographically. The TestHeap.java uses this Comparator to manage a Heap of Strings and also performs several Unit Tests on it.
+
+<b>6) Heap / src / com / heap / TestHeap.java</b><br/>
+This class has the main method and creates two Heaps (Min-Heap and String-Heap). It also performs certain unit tests. This can be refered to implement the library.
+
+<b>7) Heap / src / com / heap / UnitTests.java</b><br/>
+This class has certain Tests and prints an error if the result is not as desired.
 
