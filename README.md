@@ -1,7 +1,7 @@
 Heap(Priority Queue)
 ====
 
- Heap Operations
+<b>Heap Operations</b>
  
 
 Operations | Running Time
@@ -13,7 +13,7 @@ Operations | Running Time
  Build Heap:|<b>O(nlogn)</b>
  Find K Ordered Top(Min/Max) Elements:|<b>O(klogn)</b>
  
-File Descriptions:
+<b>File's Descriptions:</b>
 
 <b>1) Heap / src / com / heap / Heap.java:</b><br/>
 The library importing which you will be able to use all the Heap operations with the above mentioned Running Times
